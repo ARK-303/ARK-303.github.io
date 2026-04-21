@@ -58,13 +58,13 @@
 <section class="toolbar">
   <div class="panel control">
     <h2>按标签查找</h2>
-    <p>默认不选择任何标签时显示全部。点击标签可作为“包含标签”筛选。</p>
+    
     <div id="includeTags" class="chip-list"></div>
   </div>
 
   <div class="panel control">
     <h2>忽略标签</h2>
-    <p>点击标签后，它会从结果中排除。你可以同时使用“包含”和“忽略”。</p>
+    
     <div id="excludeTags" class="chip-list"></div>
   </div>
 
@@ -101,7 +101,7 @@
 
 <script>
 document.addEventListener("DOMContentLoaded", () => {
-  const articles = [{"title":"一、简介","date":"2026-04-07","category":"笔记 / JavaScript","excerpt":"1. JavaScript 简介JavaScript 是什么？JavaScript 是一种让网页“活”起来的脚本语言。它可以响应点击、修改页面内容、和服务器通信，也可以处理用户交互。 JavaScript 在哪里运行？主要在浏览器里，也可以","tags":["JavaScript","笔记"],"href":"/2026/04/07/2026-04-07-javascript/"},{"title":"Hello World","date":"2026-04-20","category":"未分类","excerpt":"Welcome to Hexo! This is your very first post. Check documentation for more info. If you get any problems when using Hex","tags":[],"href":"/2026/04/20/hello-world/"},{"title":"test_my_site","date":"2026-04-20","category":"未分类","excerpt":"","tags":[],"href":"/2026/04/20/test-my-site/"}];
+  const articles = [{"title":"test_my_site","date":"2026-04-20","category":"未分类","excerpt":"","tags":[],"href":"/2026/04/20/test-my-site/"},{"title":"Hello World","date":"2026-04-20","category":"未分类","excerpt":"Welcome to Hexo! This is your very first post. Check documentation for more info. If you get any problems when using Hex","tags":[],"href":"/2026/04/20/hello-world/"},{"title":"一、简介","date":"2026-04-07","category":"笔记 / JavaScript","excerpt":"1. JavaScript 简介JavaScript 是什么？JavaScript 是一种让网页“活”起来的脚本语言。它可以响应点击、修改页面内容、和服务器通信，也可以处理用户交互。 JavaScript 在哪里运行？主要在浏览器里，也可以","tags":["JavaScript","笔记"],"href":"/2026/04/07/2026-04-07-javascript/"}];
 
   const state = {
     include: new Set(),
