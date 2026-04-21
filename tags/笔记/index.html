@@ -49,55 +49,277 @@
     <div class="badge"><i></i> ARTICLE ARCHIVE // CATALOG</div>
     <h1><span class="star-text">文章目录</span><br/>在星图中检索篇章。</h1>
     <p class="subhead">
-      这里会按时间列出所有文章。Hexo 的归档页会把当前页的文章数据交给模板，你只要按 `page.posts` 输出即可。:contentReference[oaicite:2]{index=2}
+      这里是文章目录页。你可以按标签筛选、忽略指定标签，切换时间顺序，默认显示全部内容，
+      并通过数字分页快速跳转到指定页面。
     </p>
   </div>
 </section>
 
-<section class="panel section">
-  <div class="head">
-    <h2>最新文章</h2>
-    <span>默认新的在前</span>
+<section class="toolbar">
+  <div class="panel control">
+    <h2>按标签查找</h2>
+    <p>默认不选择任何标签时显示全部。点击标签可作为“包含标签”筛选。</p>
+    <div id="includeTags" class="chip-list"></div>
   </div>
 
-  <div class="posts">
-    
-      <article class="post">
-        <a class="post-link" href="/2026/04/07/2026-04-07-javascript/">
-          <div class="cover">
-            <div class="constellation">
-              <span class="star" style="left:16%;top:28%"></span>
-              <span class="star" style="left:38%;top:20%;animation-delay:-1s"></span>
-              <span class="star" style="left:60%;top:34%;animation-delay:-2s"></span>
-              <span class="star" style="left:78%;top:22%;animation-delay:-1.4s"></span>
-              <span class="line" style="left:18%;top:31%;width:24%;transform:rotate(12deg)"></span>
-              <span class="line" style="left:40%;top:23%;width:22%;transform:rotate(18deg)"></span>
-              <span class="line" style="left:62%;top:36%;width:18%;transform:rotate(-10deg)"></span>
-            </div>
-          </div>
-          <div class="post-body">
-            <div class="meta">2026-04-06 · 文章</div>
-            <h3>一、简介</h3>
-            <p>1. JavaScript 简介JavaScript 是什么？JavaScript 是一种让网页“活”起来的脚本语言。它可以响应点击、修改页面内容、和服务器通信，也可以处理用户交互。
-JavaScript 在哪里运行？主要在浏览器里，也可以...</p>
-            <div class="tags">
-              <span class="tag">星图</span>
-              <span class="tag">归档</span>
-            </div>
-          </div>
-        </a>
-      </article>
-    
+  <div class="panel control">
+    <h2>忽略标签</h2>
+    <p>点击标签后，它会从结果中排除。你可以同时使用“包含”和“忽略”。</p>
+    <div id="excludeTags" class="chip-list"></div>
   </div>
 
-  <div class="pagination">
-    
-
-    <span class="page-btn active">1 / 1</span>
-
-    
+  <div class="panel control">
+    <h2>排序与概览</h2>
+    <div class="sort-row">
+      <select id="sortSelect" class="select">
+        <option value="newest">时间排序：从后往前（新的在前）</option>
+        <option value="oldest">时间排序：从前往后（旧的在前）</option>
+      </select>
+      <div class="stats-grid">
+        <div class="stat"><strong id="totalCount">0</strong><span>篇文章</span></div>
+        <div class="stat"><strong id="currentCount">0</strong><span>当前页显示</span></div>
+      </div>
+      <div class="hint">默认新的在前。你也可以自己切换顺序。</div>
+    </div>
   </div>
 </section>
+
+<section id="list" class="panel pagination-panel">
+  <div class="pagination-top">
+    <div class="pagination-info" id="paginationInfo">正在加载目录……</div>
+    <div class="pagination-controls" id="paginationControls"></div>
+  </div>
+
+  <div class="page-jump">
+    <label for="pageInput">输入页码跳转：</label>
+    <input id="pageInput" class="jump-input" type="number" min="1" value="1" />
+    <button id="jumpBtn" class="jump-btn" type="button">跳转</button>
+  </div>
+</section>
+
+<section id="articleList" class="article-list"></section>
+
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+  const articles = [{"title":"一、简介","date":"2026-04-07","category":"笔记 / JavaScript","excerpt":"1. JavaScript 简介JavaScript 是什么？JavaScript 是一种让网页“活”起来的脚本语言。它可以响应点击、修改页面内容、和服务器通信，也可以处理用户交互。 JavaScript 在哪里运行？主要在浏览器里，也可以","tags":["JavaScript","笔记"],"href":"/2026/04/07/2026-04-07-javascript/"},{"title":"Hello World","date":"2026-04-20","category":"未分类","excerpt":"Welcome to Hexo! This is your very first post. Check documentation for more info. If you get any problems when using Hex","tags":[],"href":"/2026/04/20/hello-world/"},{"title":"test_my_site","date":"2026-04-20","category":"未分类","excerpt":"","tags":[],"href":"/2026/04/20/test-my-site/"}];
+
+  const state = {
+    include: new Set(),
+    exclude: new Set(),
+    sort: 'newest',
+    page: 1,
+    perPage: 3
+  };
+
+  const tagPool = [...new Set(articles.flatMap(a => a.tags))].sort((a, b) => a.localeCompare(b, 'zh-Hans-CN'));
+
+  const includeTagsEl = document.getElementById('includeTags');
+  const excludeTagsEl = document.getElementById('excludeTags');
+  const sortSelect = document.getElementById('sortSelect');
+  const articleListEl = document.getElementById('articleList');
+  const paginationInfoEl = document.getElementById('paginationInfo');
+  const paginationControlsEl = document.getElementById('paginationControls');
+  const pageInputEl = document.getElementById('pageInput');
+  const jumpBtn = document.getElementById('jumpBtn');
+  const totalCountEl = document.getElementById('totalCount');
+  const currentCountEl = document.getElementById('currentCount');
+
+  function buildTagButton(tag, mode) {
+    const btn = document.createElement('button');
+    btn.type = 'button';
+    btn.className = 'chip-btn';
+    btn.textContent = tag;
+    btn.dataset.tag = tag;
+    btn.dataset.mode = mode;
+
+    btn.addEventListener('click', () => {
+      const target = mode === 'include' ? state.include : state.exclude;
+
+      if (tag === '全部') {
+        if (mode === 'include') state.include.clear();
+        render();
+        return;
+      }
+
+      if (target.has(tag)) target.delete(tag);
+      else target.add(tag);
+
+      render();
+    });
+
+    return btn;
+  }
+
+  function renderTagButtons() {
+    includeTagsEl.innerHTML = '';
+    excludeTagsEl.innerHTML = '';
+
+    const allBtn = buildTagButton('全部', 'include');
+    allBtn.classList.add('active', 'include');
+    includeTagsEl.appendChild(allBtn);
+
+    tagPool.forEach(tag => {
+      includeTagsEl.appendChild(buildTagButton(tag, 'include'));
+      excludeTagsEl.appendChild(buildTagButton(tag, 'exclude'));
+    });
+  }
+
+  function updateTagButtonStates() {
+    [...includeTagsEl.querySelectorAll('.chip-btn')].forEach(btn => {
+      const tag = btn.dataset.tag;
+      if (tag === '全部') {
+        btn.classList.toggle('active', state.include.size === 0);
+        btn.classList.toggle('include', state.include.size === 0);
+        return;
+      }
+      btn.classList.toggle('active', state.include.has(tag));
+      btn.classList.toggle('include', state.include.has(tag));
+    });
+
+    [...excludeTagsEl.querySelectorAll('.chip-btn')].forEach(btn => {
+      const tag = btn.dataset.tag;
+      btn.classList.toggle('active', state.exclude.has(tag));
+      btn.classList.toggle('exclude', state.exclude.has(tag));
+    });
+  }
+
+  function filteredArticles() {
+    let items = [...articles];
+
+    if (state.include.size > 0) {
+      items = items.filter(article => [...state.include].every(tag => article.tags.includes(tag)));
+    }
+
+    if (state.exclude.size > 0) {
+      items = items.filter(article => ![...state.exclude].some(tag => article.tags.includes(tag)));
+    }
+
+    items.sort((a, b) => {
+      const diff = new Date(a.date) - new Date(b.date);
+      return state.sort === 'newest' ? -diff : diff;
+    });
+
+    return items;
+  }
+
+  function renderPagination(totalPages) {
+    paginationControlsEl.innerHTML = '';
+
+    const makeBtn = (label, page, disabled = false, active = false) => {
+      const btn = document.createElement('button');
+      btn.type = 'button';
+      btn.className = 'page-btn';
+      if (active) btn.classList.add('active');
+      btn.textContent = label;
+      btn.disabled = disabled;
+      btn.addEventListener('click', () => {
+        if (!disabled) {
+          state.page = page;
+          render();
+          window.scrollTo({ top: document.getElementById('list').offsetTop - 82, behavior: 'smooth' });
+        }
+      });
+      return btn;
+    };
+
+    paginationControlsEl.appendChild(makeBtn('‹', Math.max(1, state.page - 1), state.page === 1));
+
+    for (let i = 1; i <= totalPages; i++) {
+      paginationControlsEl.appendChild(makeBtn(String(i), i, false, i === state.page));
+    }
+
+    paginationControlsEl.appendChild(makeBtn('›', Math.min(totalPages, state.page + 1), state.page === totalPages));
+  }
+
+  function renderCards(pageItems) {
+    if (pageItems.length === 0) {
+      articleListEl.innerHTML = `
+        <div class="empty-state panel">
+          当前筛选条件下没有文章。你可以清除某些标签，或者切换排序后再看。
+        </div>
+      `;
+      return;
+    }
+
+    articleListEl.innerHTML = pageItems.map((article, index) => {
+      const stars = [
+        `<span class="star" style="left:16%;top:28%"></span>`,
+        `<span class="star" style="left:38%;top:20%;animation-delay:-1s"></span>`,
+        `<span class="star" style="left:60%;top:34%;animation-delay:-2s"></span>`,
+        `<span class="star" style="left:78%;top:22%;animation-delay:-1.4s"></span>`,
+        `<span class="line" style="left:18%;top:31%;width:24%;transform:rotate(12deg)"></span>`,
+        `<span class="line" style="left:40%;top:23%;width:22%;transform:rotate(18deg)"></span>`,
+        `<span class="line" style="left:62%;top:36%;width:18%;transform:rotate(-10deg)"></span>`
+      ].join('');
+
+      return `
+        <article class="article-card">
+          <a class="cover" href="${article.href}" aria-label="打开文章：${article.title}">
+            <div class="constellation">${stars}</div>
+          </a>
+          <div class="body">
+            <div class="meta-row">
+              <span class="meta-pill">${article.date}</span>
+              <span class="meta-pill">${article.category}</span>
+              <span class="meta-pill">第 ${((state.page - 1) * state.perPage) + index + 1} 篇</span>
+            </div>
+            <h3><a href="${article.href}">${article.title}</a></h3>
+            <p>${article.excerpt}</p>
+            <div class="tags">
+              ${article.tags.map(tag => `<span class="tag">${tag}</span>`).join('')}
+            </div>
+          </div>
+        </article>
+      `;
+    }).join('');
+  }
+
+  function render() {
+    updateTagButtonStates();
+    sortSelect.value = state.sort;
+
+    const items = filteredArticles();
+    const total = items.length;
+    const totalPages = Math.max(1, Math.ceil(total / state.perPage));
+    if (state.page > totalPages) state.page = totalPages;
+
+    const start = (state.page - 1) * state.perPage;
+    const pageItems = items.slice(start, start + state.perPage);
+
+    totalCountEl.textContent = String(total);
+    currentCountEl.textContent = String(pageItems.length);
+    paginationInfoEl.textContent = total === 0
+      ? '共 0 篇文章，当前没有可显示内容。'
+      : `共 ${total} 篇文章，当前第 ${state.page} / ${totalPages} 页，默认新的在前。`;
+
+    renderCards(pageItems);
+    renderPagination(totalPages);
+    pageInputEl.value = String(state.page);
+  }
+
+  sortSelect.addEventListener('change', () => {
+    state.sort = sortSelect.value;
+    state.page = 1;
+    render();
+  });
+
+  jumpBtn.addEventListener('click', () => {
+    const target = Number(pageInputEl.value);
+    const totalPages = Math.max(1, Math.ceil(filteredArticles().length / state.perPage));
+    if (!Number.isFinite(target)) return;
+    state.page = Math.min(Math.max(1, target), totalPages);
+    render();
+    window.scrollTo({ top: document.getElementById('list').offsetTop - 82, behavior: 'smooth' });
+  });
+
+  pageInputEl.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter') jumpBtn.click();
+  });
+
+  renderTagButtons();
+  render();
+});
+</script>
   </main>
 
   
