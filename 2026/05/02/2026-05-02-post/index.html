@@ -1,0 +1,408 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  
+
+
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>第一部分:JavaScript编程语言·二、JavaScript基础知识 · Ark-303的博客</title>
+<meta name="description" content="一个偏星空史诗风格的原创博客" />
+<meta name="theme-color" content="#040611" />
+<link rel="stylesheet" href="/css/style.css" />
+<meta name="generator" content="Hexo 7.3.0"></head>
+<body>
+  <div class="nebula n1"></div>
+  <div class="nebula n2"></div>
+  <div class="nebula n3"></div>
+
+  
+
+
+
+<header>
+  <div class="wrap nav">
+    <a class="brand" href="/">
+      <span class="sigil"></span>
+      <div>Ark-303的博客</div>
+    </a>
+
+    <nav class="nav-links">
+      
+        <a href="/#posts">篇章</a>
+      
+        <a href="/archives/">归档</a>
+      
+        <a href="/#about">星图</a>
+      
+        <a href="/#contact">坐标</a>
+      
+    </nav>
+  </div>
+</header>
+
+  <main class="wrap">
+    
+
+<button class="toc-toggle" id="tocToggle" type="button">目录</button>
+
+<section class="hero panel" id="top">
+  <div class="hero-top">
+    <div class="badge"><i></i> ARTICLE LOG // POST</div>
+    <h1><span class="star-text">第一部分:JavaScript编程语言·二、JavaScript基础知识</span><br/>在星图上写下坐标。</h1>
+    <p class="subhead">
+      1.Hello, World!·JavaScript 在哪儿写、怎么运行？JS需要个地方运行——用浏览器最方便。
+怎么把 JS 塞进网页里——靠一个叫 &amp;lt;script&amp;gt; 的标签。
+
+对于服务器端环境（如 Node.js），你只需要使用诸如 “node my.js” 的命令行来执行它。
+
+·关于 &amp;lt;script&amp;gt; 标签的那些“老古董”特...
+    </p>
+    <div class="meta-row">
+      <span class="meta-pill">2026-05-01</span>
+      <span class="meta-pill">作者：Ark-303</span>
+      <span class="meta-pill">文章：正文 / 记录 / 叙事</span>
+    </div>
+  </div>
+</section>
+
+<div class="progress-wrap">
+  <div class="progress-shell"><div id="progressBar" class="progress-bar"></div></div>
+</div>
+
+<section class="content-grid">
+  <article class="panel article" id="postContent">
+    <h2 id="1-Hello-World"><a href="#1-Hello-World" class="headerlink" title="1.Hello, World!"></a>1.Hello, World!</h2><h3 id="·JavaScript-在哪儿写、怎么运行？"><a href="#·JavaScript-在哪儿写、怎么运行？" class="headerlink" title="·JavaScript 在哪儿写、怎么运行？"></a>·JavaScript 在哪儿写、怎么运行？</h3><p><strong>JS需要个地方运行</strong>——用浏览器最方便。</p>
+<p><strong>怎么把 JS 塞进网页里</strong>——靠一个叫 &lt;script&gt; 的标签。</p>
+<blockquote>
+<p>对于服务器端环境（如 Node.js），你只需要使用诸如 “node my.js” 的命令行来执行它。</p>
+</blockquote>
+<h3 id="·关于-标签的那些“老古董”特性"><a href="#·关于-标签的那些“老古董”特性" class="headerlink" title="·关于 &lt;script&gt; 标签的那些“老古董”特性"></a>·关于 &lt;script&gt; 标签的那些“老古董”特性</h3><p>&lt;script&gt; 标签有一些现在很少用到的特性（attribute），但是我们可以在老代码中找到它们：</p>
+<p><strong>type特性：&lt;script type&#x3D;…&gt;</strong>:</p>
+<p>在老的 HTML4 标准中，要求 script 标签有 type 特性。通常是 type&#x3D;”text&#x2F;javascript”。这样的特性声明现在已经不再需要。而且，现代 HTML 标准已经完全改变了此特性的含义。现在，它可以用于 JavaScript 模块。</p>
+<p><strong>language 特性：&lt;script language&#x3D;…&gt;</strong>:</p>
+<p>这个特性是为了显示脚本使用的语言。这个特性现在已经没有任何意义，因为语言默认就是 JavaScript。不再需要使用它了。</p>
+<p><strong>脚本前后的注释</strong>:</p>
+<p>在非常古老的书籍和指南中，你可能会在 &lt;script&gt; 标签里面找到注释，就像这样：</p>
+<pre><code>
+    &lt;script type="text/javascript"&gt;&lt;!--</br>
+        ...</br>
+    //--&gt;&lt;/script&gt;</br>
+</code></pre>
+
+<p>现代 JavaScript 中已经不这样使用了。这些注释是用于不支持 &lt;script&gt; 标签的古老的浏览器隐藏 JavaScript 代码的。由于最近 15 年内发布的浏览器都没有这样的问题，因此这种注释能帮你辨认出一些老掉牙的代码。</p>
+<h3 id="·把-JS-代码放到单独文件里"><a href="#·把-JS-代码放到单独文件里" class="headerlink" title="·把 JS 代码放到单独文件里"></a>·把 JS 代码放到单独文件里</h3><p>当 JS 代码变长，不可能全写在 HTML 里，不然乱死了。</p>
+<p>所以可以把代码放在一个 .js 文件里，再用 &lt;script&gt; 的 src 属性引入</p>
+<pre><code>&lt;script src="/path/to/script.js"&gt;&lt;/script&gt;</code></pre>
+
+<p>这里，&#x2F;path&#x2F;to&#x2F;script.js 是脚本文件从网站根目录开始的绝对路径。当然也可以提供当前页面的相对路径。例如，src&#x3D;”script.js”，就像 src&#x3D;”.&#x2F;script.js”，表示当前文件夹中的 “script.js” 文件。</p>
+<p>我们也可以提供一个完整的 URL 地址，例如：</p>
+<pre><code>&lt;script src="https://example.com/script.js"&gt;&lt;/script&gt;</code></pre>
+
+<div class="note">
+    如果用了 src，标签里面不能再写任何代码，写了也会被忽略。
+</div>
+
+<p><strong>正确写法：分成两个标签</strong></p>
+<pre><code>
+    &lt;script src="my-script.js"&gt;&lt;/script&gt;
+    &lt;script&gt;
+    alert(1);
+    &lt;/script&gt;
+</code></pre>
+
+<h3 id="·好处是什么？"><a href="#·好处是什么？" class="headerlink" title="·好处是什么？"></a>·好处是什么？</h3><ul>
+    <li><strong>代码复用</strong>——多个页面可以共用同一个 JS 文件。</li>
+    <li><strong>加载更快</strong>——浏览器会把 JS 文件缓存下来，第二次访问不用重新下载。</li>
+</ul>
+
+<h2 id="2-代码结构"><a href="#2-代码结构" class="headerlink" title="2.代码结构"></a>2.代码结构</h2><h3 id="·什么是“语句”？"><a href="#·什么是“语句”？" class="headerlink" title="·什么是“语句”？"></a>·什么是“语句”？</h3><p>语句是执行行为（action）的语法结构和命令。</p>
+<p>就是一句一句的命令，告诉浏览器要干什么。</p>
+<p>比如 alert(‘Hello’) 就是一条语句，意思是“弹出一个写着 Hello 的框”。</p>
+<p>你可以写很多条语句，它们会从上到下依次执行。</p>
+<pre><code>
+    alert('Hello');
+    alert('World');
+</code></pre>
+
+<h3 id="·分号-到底要不要写？"><a href="#·分号-到底要不要写？" class="headerlink" title="·分号 ; 到底要不要写？"></a>·分号 ; 到底要不要写？</h3><p>结论：新手一定要写分号！</p>
+<p>虽然 JS 有个“自动插入分号”的机制，换行有时可以代替分号，但不总是靠谱。不写分号可能在某些情况下产生难以发现的 bug。</p>
+<blockquote>
+<p><strong>自动分号插入:</strong><br>当存在换行符（line break）时，在大多数情况下可以省略分号。<br>下面的代码也是可以运行的：</p>
+<pre><code>
+  alert('Hello')
+  alert('World')
+</code></pre>
+<p>在这，JavaScript 将换行符理解成“隐式”的分号。</p>
+</blockquote>
+<p>举个例子（你暂时不用懂细节，只记住现象就行）：</p>
+<p>没写分号的坑：</p>
+<pre><code>
+    alert("Hello")  // 这里没分号
+
+    [1, 2].forEach(alert);
+</code></pre>
+<p>这段代码不会弹出 1 和 2，只会弹 Hello，并且控制台会报错。</p>
+<p>因为 JS 把两行当成一行了，变成了 alert(“Hello”)[1,2].forEach(alert)，这完全是错的理解。</p>
+<p>正确写法（加了分号）：</p>
+<pre><code>
+    alert("Hello");  
+
+    [1, 2].forEach(alert);
+</code></pre>
+
+<h3 id="·注释"><a href="#·注释" class="headerlink" title="·注释"></a>·注释</h3><p>注释是写给你自己（或别人）看的说明，浏览器会完全忽略它们。</p>
+<p>单行注释：&#x2F;&#x2F;</p>
+<p>多行注释：&#x2F;* … *&#x2F;</p>
+<p>实用技巧：用注释临时禁用一段代码</p>
+<blockquote>
+<p><strong>快捷键：</strong>在大多数代码编辑器里，选中代码按 Ctrl + &#x2F;（Mac 是 Cmd + &#x2F;）可以快速把代码变成注释，再按一次取消注释。多行注释快捷键通常是 Ctrl + Shift + &#x2F;。<br><strong>注释不能嵌套：</strong>别在一个 &#x2F;<em>…</em>&#x2F; 里面再写一个 &#x2F;<em>…</em>&#x2F;，会报错。</p>
+</blockquote>
+<h2 id="3-现代模式，”use-strict”"><a href="#3-现代模式，”use-strict”" class="headerlink" title="3.现代模式，”use strict”"></a>3.现代模式，”use strict”</h2><h3 id="·为什么需要-“use-strict”？"><a href="#·为什么需要-“use-strict”？" class="headerlink" title="·为什么需要 “use strict”？"></a>·为什么需要 “use strict”？</h3><p>长久以来，JavaScript 不断向前发展且并未带来任何兼容性问题。新的特性被加入，旧的功能也没有改变。</p>
+<p>这么做有利于兼容旧代码，但缺点是 JavaScript 创造者的任何错误或不完善的决定也将永远被保留在 JavaScript 语言中。</p>
+<p>这种情况一直持续到 2009 年 ECMAScript 5 (ES5) 的出现。ES5 规范增加了新的语言特性并且修改了一些已经存在的特性。为了保证旧的功能能够使用，大部分的修改是默认不生效的。你需要一个特殊的指令 —— “use strict” 来明确地激活这些特性。</p>
+<h3 id="·怎么开启严格模式？"><a href="#·怎么开启严格模式？" class="headerlink" title="·怎么开启严格模式？"></a>·怎么开启严格模式？</h3><p>放在脚本最顶部（推荐新手）</p>
+<pre><code>
+    "use strict";
+
+    // 从这里开始，下面的代码都在严格模式下运行
+    alert("Hello");
+</code></pre>
+
+<p>放在函数内部（只对该函数有效）</p>
+<pre><code>
+    function myFunction() &#123;
+    "use strict";
+    // 只有这个函数内部是严格模式
+    &#125;
+</code></pre>
+
+<div class="note">
+  1."use strict" 必须在脚本的最顶部:如果前面有别的代码，它就不生效了（注释除外）。
+  2.一旦开启严格模式，就关不掉了。
+</div>
+
+<h3 id="·浏览器控制台"><a href="#·浏览器控制台" class="headerlink" title="·浏览器控制台"></a>·浏览器控制台</h3><p>你在网页里按 F12 打开的控制台（Console）里直接敲代码，默认是不开启严格模式的。</p>
+<p>有时，当 use strict 会对代码产生一些影响时，你会得到错误的结果。</p>
+<p>如果你想在控制台里测试严格模式下的代码，可以这样：</p>
+<p><strong>方法一（多行输入）</strong></p>
+<p>先输入 ‘use strict’; 然后按 Shift + Enter 换行，再写后面的代码，最后按 Enter 执行。</p>
+<p>如果不行，例如你使用的是旧版本的浏览器，那么有一种很丑但可靠的启用 use strict 的方法。</p>
+<p><strong>方法二（包装一下）</strong></p>
+<p>把代码包在一个自执行函数里：</p>
+<pre><code>
+    (function() &#123;
+      'use strict';
+      // 你的代码
+    &#125;)();
+</code></pre>
+
+<h3 id="·我们应该使用-“use-strict”-吗？"><a href="#·我们应该使用-“use-strict”-吗？" class="headerlink" title="·我们应该使用 “use strict” 吗？"></a>·我们应该使用 “use strict” 吗？</h3><p>新手答案：写！每次都在文件开头写。</p>
+<p>等你以后学了 class 和 module（高级内容），它们会自动开启严格模式，那时候你就不用手动写了。</p>
+<h2 id="4-变量"><a href="#4-变量" class="headerlink" title="4.变量"></a>4.变量</h2><h3 id="·变量是什么？"><a href="#·变量是什么？" class="headerlink" title="·变量是什么？"></a>·变量是什么？</h3><p>大多数情况下，JavaScript 应用需要处理信息。这有两个例子：</p>
+<p>一个网上商店 —— 这里的信息可能包含正在售卖的商品和购物车。</p>
+<p>一个聊天应用 —— 这里的信息可能包括用户和消息等等。</p>
+<p>变量就是用来储存这些信息的。</p>
+<p>变量是数据的“命名存储”。我们可以使用变量来保存商品、访客和其他信息。</p>
+<h3 id="·怎么创建一个变量？"><a href="#·怎么创建一个变量？" class="headerlink" title="·怎么创建一个变量？"></a>·怎么创建一个变量？</h3><p>用关键字 let。</p>
+<pre><code>
+    let message;           // 声明一个叫 message 的盒子（里面暂时没东西）
+    message = 'Hello!';    // 把 'Hello!' 放进去
+
+    alert(message);        // 弹出盒子里面的东西 -> Hello!
+</code></pre>
+
+<p>也可以一步到位：</p>
+<pre><code>
+    let message = 'Hello!';   // 声明 + 放东西一起做
+</code></pre>
+
+<blockquote>
+<p>可以在一行中声明多个变量：</p>
+<pre><code>
+  let user = 'John', age = 25, message = 'Hello';
+</code></pre>
+<p>看上去代码长度更短，但并不推荐这样。为了更好的可读性，请一行只声明一个变量。多行变量声明有点长，但更容易阅读<br>一些程序员采用下面的形式书写多个变量：</p>
+<pre><code>
+let user = 'John',
+  age = 25,
+  message = 'Hello';
+</code></pre>
+<p>甚至使用“逗号在前”的形式：</p>
+<pre><code>
+let user = 'John'
+  , age = 25
+  , message = 'Hello';
+</code></pre>
+<p>技术上讲，这些变体都有一样的效果。所以，这是个个人品味和审美方面的问题。</p>
+</blockquote>
+<h3 id="·盒子里的东西可以换"><a href="#·盒子里的东西可以换" class="headerlink" title="·盒子里的东西可以换"></a>·盒子里的东西可以换</h3><pre><code>
+    let message = 'Hello!';
+    message = 'World!';    // 换东西了，原来的 'Hello!' 被扔掉
+
+    alert(message);        // 现在弹出 World!
+</code></pre>
+
+<h3 id="·一个变量只能声明一次"><a href="#·一个变量只能声明一次" class="headerlink" title="·一个变量只能声明一次"></a>·一个变量只能声明一次</h3><p>错误写法（会报错）：</p>
+<pre><code>
+    let message = 'Hello';
+    let message = 'World';   // SyntaxError: 变量已经声明过了
+</code></pre>
+
+<p>正确写法：</p>
+<pre><code>
+    let message = 'Hello';
+    message = 'World';       // 不用再写 let，直接赋值就行
+</code></pre>
+
+<blockquote>
+<p>有趣的是，也存在禁止更改变量值的 函数式 编程语言。比如 Scala 或 Erlang。<br>在这种类型的语言中，一旦值保存在盒子中，就永远存在。如果你试图保存其他值，它会强制创建一个新盒子（声明一个新变量），无法重用之前的变量。<br>虽然第一次看上去有点奇怪，但是这些语言有很大的发展潜力。不仅如此，在某些领域，比如并行计算，这个限制有一定的好处。研究这样的一门语言（即使不打算很快就用上它）有助于开阔视野。</p>
+</blockquote>
+<h3 id="·命名规则"><a href="#·命名规则" class="headerlink" title="·命名规则"></a>·命名规则</h3><ul>
+    <li>只能用 字母、数字、$、_。</li>
+    <li>不能以数字开头。</li>
+    <li>区分大小写（apple 和 Apple 是两个不同盒子）。</li>
+    <li>不能用 JS 的保留字（比如 let、class、return。参照<a target="_blank" rel="noopener" href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Lexical_grammar#Keywords">保留字列表</a>）。</li>
+    <li>技术上允许中文，但强烈不推荐，为了其他国家的人的阅读</li>
+</ul>
+
+<blockquote>
+<p>命名习惯：驼峰式命名法（camelCase）<br>第一个单词小写，后面每个单词首字母大写。<br>例：myVeryLongName、userAge、shoppingCartTotal。</p>
+</blockquote>
+<blockquote>
+<p><strong>未采用 use strict 下的赋值</strong><br>一般，我们需要在使用一个变量前定义它。但是在早期，我们可以不使用 let 进行变量声明，而可以简单地通过赋值来创建一个变量。现在如果我们不在脚本中使用 use strict 声明启用严格模式，这仍然可以正常工作，这是为了保持对旧脚本的兼容。</p>
+<pre><code>
+   // 注意：这个例子中没有 "use strict"
+
+   num = 5; // 如果变量 "num" 不存在，就会被创建
+
+   alert(num); // 5
+</code></pre>
+<p>上面这是个糟糕的做法，严格模式下会报错。</p>
+<pre><code>
+   "use strict";
+
+   num = 5; // 错误：num 未定义
+</code></pre>
+</blockquote>
+<h3 id="·常量"><a href="#·常量" class="headerlink" title="·常量"></a>·常量</h3><p>有些数据你不想让它被改动，比如生日、数学常数，就用 const 声明。</p>
+<pre><code>
+    const myBirthday = '18.04.1982';
+    myBirthday = '01.01.2001';   // 报错！常量不能重新赋值
+</code></pre>
+
+<div class="node">
+    <strong>什么时候用 const？</strong>
+
+<pre><code>当程序员能确定这个变量永远不会改变的时候，就可以使用 const 来确保这种行为，并且清楚地向别人传递这一事实。
+</code></pre>
+</div>
+
+<h3 id="·大写形式的常数"><a href="#·大写形式的常数" class="headerlink" title="·大写形式的常数"></a>·大写形式的常数</h3><p>一个普遍的做法是将常量用作别名，以便记住那些在执行之前就已知的难以记住的值。</p>
+<p>使用大写字母和下划线来命名这些常量。</p>
+<pre><code>
+    const COLOR_RED = "#F00";
+    const COLOR_GREEN = "#0F0";
+    const COLOR_BLUE = "#00F";
+    const COLOR_ORANGE = "#FF7F00";
+
+    // ……当我们需要选择一个颜色
+    let color = COLOR_ORANGE;
+    alert(color); // #FF7F00
+</code></pre>
+<p>但如果值是在程序运行中计算出来、但之后不会改的（比如页面加载时间），仍然用 const，但命名用小写驼峰。</p>
+<pre><code>
+    const pageLoadTime = /* 网页加载所需的时间 */;
+</code></pre>
+<p>pageLoadTime 的值在页面加载之前是未知的，所以采用常规命名。但是它仍然是个常量，因为赋值之后不会改变。</p>
+<p>换句话说，大写命名的常量仅用作“硬编码（hard-coded）”值的别名。</p>
+<h3 id="·正确命名变量的一些可以遵循的规则"><a href="#·正确命名变量的一些可以遵循的规则" class="headerlink" title="·正确命名变量的一些可以遵循的规则"></a>·正确命名变量的一些可以遵循的规则</h3><ul>
+    <li>使用易读的命名，比如 userName 或者 shoppingCart。</li>
+    <li>离诸如 a、b、c 这种缩写和短名称远一点，除非你真的知道你在干什么。</li>
+    <li>变量名在能够准确描述变量的同时要足够简洁。不好的例子就是 data 和 value，这样的名称等于什么都没说。如果能够非常明显地从上下文知道数据和值所表达的含义，这样使用它们也是可以的。</li>
+    <li>脑海中的术语要和团队保持一致。如果网站的访客称为“用户”，则我们采用相关的变量命名，比如 currentUser 或者 newUser，而不要使用 currentVisitor 或者一个 newManInTown。</li>
+</ul>
+
+<div class="note">
+    宁可多声明几个变量，也不要一个变量反复装不同类型的东西（重用现有的变量），那样会把人搞晕。
+</div>
+
+<h2 id="5-数据类型"><a href="#5-数据类型" class="headerlink" title="5.数据类型"></a>5.数据类型</h2></h2><p>JavaScript 中的值都具有特定的类型。例如，字符串或数字。</p>
+<p>在 JavaScript 中有 8 种基本的数据类型（译注：7 种原始类型和 1 种引用类型）。</p>
+<p>我们可以将任何类型的值存入变量。例如，一个变量可以在前一刻是个字符串，下一刻就存储一个数字：</p>
+<pre><code>
+    // 没有错误
+    let message = "hello";
+    message = 123456;
+</code></pre>
+
+<blockquote>
+<p>允许这种操作的编程语言，例如 JavaScript，被称为“动态类型”（dynamically typed）的编程语言，意思是虽然编程语言中有不同的数据类型，但是你定义的变量并不会在定义后，被限制为某一数据类型。</p>
+</blockquote>
+<h3 id="·Number类型"><a href="#·Number类型" class="headerlink" title="·Number类型"></a>·Number类型</h3><hr>
+<h3 id="结语"><a href="#结语" class="headerlink" title="结语"></a>结语</h3><p><a href="post_list.html">回到文章目录</a></p>
+
+
+    <hr />
+
+    <div class="post-nav">
+      
+        <div class="nav-card">
+          <span>上一篇</span>
+          <strong>没有上一篇</strong>
+        </div>
+      
+
+      
+        <a class="nav-card" href="/2026/05/01/2026-04-31-post/">
+          <span>下一篇</span>
+          <strong>自我介绍</strong>
+        </a>
+      
+    </div>
+  </article>
+
+  <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+  <aside class="panel side" id="articleSidebar">
+    <div class="side-card">
+      <h3>文章元信息</h3>
+      <ul>
+        <li>标题：第一部分:JavaScript编程语言·二、JavaScript基础知识</li>
+        <li>时间：2026-05-01</li>
+        <li>作者：Ark-303</li>
+        <li>状态：已发布</li>
+      </ul>
+    </div>
+
+    <div class="side-card">
+      <h3>内容简要</h3>
+      <p>
+        1.Hello, World!·JavaScript 在哪儿写、怎么运行？JS需要个地方运行——用浏览器最方便。
+怎么把 JS 塞进网页里——靠一个叫 &amp;lt;script&amp;gt; 的标签。
+
+对于服务器端环境（如 Node.js），你只需要使用诸如 “node my.js” 的命令行来执行它。
+
+·关于 &amp;lt;sc...
+      </p>
+    </div>
+
+    <div class="side-card toc-card">
+      <h3>本页结构</h3>
+      <div class="toc" id="tocList"></div>
+    </div>
+  </aside>
+</section>
+  </main>
+
+  
+
+<footer>
+  <div class="wrap footer-wrap">
+    <p>© 2026 Ark-303的博客 · Stellar Myth</p>
+  </div>
+</footer>
+
+<script src="/js/main.js"></script>
+</body>
+</html>
