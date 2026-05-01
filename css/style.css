@@ -2067,4 +2067,8 @@
     flex-direction: column;
     align-items: flex-start;
   }
+
+  .new{
+    color:#f5e7c4;
+  }
 }
